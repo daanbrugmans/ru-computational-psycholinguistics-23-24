@@ -1,5 +1,6 @@
-**/data/*.csv
-**/data/*.txt
+assignment-1/data/*.csv
+assignment-1/data/*.txt
+assignment-2/code/trained_models/*
 
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
