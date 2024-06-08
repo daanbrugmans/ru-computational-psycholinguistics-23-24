@@ -18,18 +18,22 @@
 
 \section{Introduction}
 This report is the realization of the Assignment 2 project for the Radboud University course \href{https://www.ru.nl/courseguides/arts/courses/ma/rema-lc/let-rema-lcex28/}{Computational Psycholinguistics}.
-For this assignment, students of the course must investigate whether the gradients computed from a recurrent neural network correlate with measured P600 component activity from a controlled experiment.
+For this assignment, students must investigate whether the gradients computed from a recurrent neural network correlate with measured P600 component activity from a controlled experiment.
 The reasoning behind this assignment is that recent research (\cite{fitz2019erp,frank2024gradients}) has shown that the P600 component may be the backpropagation of prediction errors in the human language system.
-Since neural language models also backpropagate their prediction errors using gradient descent, there may exist similarities between the language error backpropagation of human and artificial neural language systems.
+Since neural language models also backpropagate their prediction errors using gradients, there may exist similarities between the language error backpropagation of human and artificial neural language systems.
 This report contains the findings found by me for the Assignment 2 project.
+
+The relevant code for this assignment can be found at the following url: \url{https://github.com/daanbrugmans/ru-computational-psycholinguistics-23-24/tree/main/assignment-2/code}.
 
 \section{Related Work}
 For the Assignment 2 project, students must choose a controlled experiment where participants read English or Dutch sentences while their P600 component is measured.
 I have chosen to use the data from the controlled experiment performed in \cite{frank2015erp}.
-This data is also used by the authors of \cite{frank2024gradients}.
+This data is also used by the authors of \cite{frank2024gradients}, and is briefly introduced in the description of the assignment.
+This means that my report is an attempt at a reproduction of the work in \cite{frank2024gradients}.
+
 The data from the controlled experiment in \cite{frank2015erp} consists of EEG data of 24 native British English speakers, who all read a set of 205 sentences taken from English-language novels.
-The authors recorded EEG data of six different ERP components, including the P600 component, and calculated the average EEG values for every ERP component, for every word of every sentence for every participant.
-The dataset should fulfill the requirements set by the assignment: the experiment language is English, the participants' stimuli are independent sentences, the size of the P600 component is one dependent variable, and the independent variables are manipulated by varying the content of the sentence stimuli.
+The authors recorded EEG data of six different ERP components, including the P600 component, and calculated the average EEG values for every ERP component, for every word of every sentence for every participant of the experiment.
+This dataset should fulfill the requirements set by the assignment: the experiment language is English, the participants' stimuli are independent sentences, the size of the P600 component is one dependent variable and showed an effect, and the independent variables are manipulated by varying the content of the sentence stimuli.
 
 \section{Methodology}
 
