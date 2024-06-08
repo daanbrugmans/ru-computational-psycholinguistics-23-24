@@ -14,6 +14,8 @@
 \author{Daan Brugmans (S1080742)}
 \date{\today}
 
+\graphicspath{{./images}}
+
 \maketitle
 
 \section{Introduction}
@@ -64,13 +66,85 @@ I do this in order to improve the reproducibility of my results.
 This is why I also set some settings for CUDA regarding PyTorch's randomness when computing on GPU.
 
 \section{Results}
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=\textwidth]{}
-%     \caption{}
-%     \label{fig:}
-% \end{figure}
+\begin{figure*}
+    \centering
+    \includegraphics[width=.9\textwidth]{correlation_change/surprisal_gradients.png}
+    \caption{The change of the Pearson Correlation Coefficient between Model Surprisal and Model Gradients as the model is trained on increasingly more data.}
+    \label{fig:coefficient_surprisal_gradients}
+\end{figure*}
+\begin{figure*}
+    \centering
+    \includegraphics[width=.9\textwidth]{correlation_change/gradients_p600.png}
+    \caption{The change of the Pearson Correlation Coefficient between Model Gradients and P600 as the model is trained on increasingly more data.}
+    \label{fig:coefficient_gradients_p600}
+\end{figure*}
+\begin{figure*}
+    \centering
+    \includegraphics[width=.9\textwidth]{correlation_change/surprisal_p600.png}
+    \caption{The change of the Pearson Correlation Coefficient between Model Surprisal and Mean P600 as the model is trained on increasingly more data.}
+    \label{fig:coefficient_surprisal_p600}
+\end{figure*}
 
+Figures \ref{fig:coefficient_surprisal_gradients}, \ref{fig:coefficient_gradients_p600}, and \ref{fig:coefficient_surprisal_p600} show the change of the correlation between variables as the amount of data the neural language model has trained on increases.
+The exact values of the points in this plot can be found in tables \ref{tab:correlation_surprisal_gradients}, \ref{tab:correlation_gradients_p600}, and \ref{fig:coefficient_surprisal_p600} respectively.
+The individual scatterplots are placed in the appendices.
+
+The data in figure \ref{fig:coefficient_surprisal_gradients} shows an interesting trend in the predictive power of a model's surprisal 
+
+\begin{table}
+    \centering
+    \begin{tabular}{c|c}
+        \textbf{Trained Data Count} & \textbf{\textit{r}} \\
+        \hline
+        10000&-0.169\\
+        30000&-0.397\\
+        100000&-0.415\\
+        300000&-0.491\\
+        1000000&-0.288\\
+        3000000&-0.243\\
+        10000000&-0.040\\
+        30000000&0.113\\
+        epoch1&0.212
+    \end{tabular}
+    \caption{Correlation Coefficients between Model Surprisal and Model Gradients by the model's train data size.}
+    \label{tab:correlation_surprisal_gradients}
+\end{table}
+\begin{table}
+    \centering
+    \begin{tabular}{c|c}
+        \textbf{Trained Data Count} & \textbf{\textit{r}} \\
+        \hline
+        1000&0.103\\
+        30000&-0.026\\
+        100000&-0.035\\
+        300000&-0.037\\
+        1000000&0.007\\
+        3000000&0.021\\
+        10000000&0.053\\
+        30000000&0.084\\
+        epoch1&0.116
+    \end{tabular}
+    \caption{Correlation Coefficients between Model Gradients and Mean P600 by the model's train data size.}
+    \label{tab:correlation_gradients_p600}
+\end{table}
+\begin{table}
+    \centering
+    \begin{tabular}{c|c}
+        \textbf{Trained Data Count} & \textbf{\textit{r}} \\
+        \hline
+        10000&0.154\\
+        30000&0.156\\
+        100000&0.159\\
+        300000&0.154\\
+        1000000&0.149\\
+        3000000&0.125\\
+        10000000&0.083\\
+        30000000&0.065\\
+        epoch1&0.058
+    \end{tabular}
+    \caption{Correlation Coefficients between Model Surprisal and Mean P600 by the model's train data size.}
+    \label{tab:correlation_suprisal_p600}
+\end{table}
 
 \section{Conclusions}
 
@@ -82,7 +156,7 @@ This is why I also set some settings for CUDA regarding PyTorch's randomness whe
 \section{Plots of Model Surprisal vs. Model Gradients}
 % \begin{figure}
 %     \centering
-%     \includegraphics[width=\textwidth]{}
+%     \includegraphics[width=*\textwidth]{}
 %     \caption{}
 %     \label{fig:}
 % \end{figure}
