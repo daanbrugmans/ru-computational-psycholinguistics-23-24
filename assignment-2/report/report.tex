@@ -28,7 +28,7 @@ This report contains the findings found by me for the Assignment 2 project.
 The relevant code for this assignment can be found at the following URL: \url{https://github.com/daanbrugmans/ru-computational-psycholinguistics-23-24/tree/main/assignment-2/code}.
 
 \section{Related Work}
-For my realization of Assignment 2, I have chosen a controlled experiment from \cite{kim2005combinatory}, specifically their first experiment.
+For my realization of Assignment 2, I have chosen a controlled experiment from Kim and Osterhout (\cite{kim2005combinatory}), specifically their first experiment.
 Kim and Osterhout researched P600 activity in anomalous sentences.
 When they released their research, it was generally accepted that the P600 component was solely responsible for language error related to syntax, while the N400 was responsible for language error related to semantics.
 In their work, Kim and Osterhout show that the P600 is still activated in sentences that are syntactically unambiguous, but have illogical semantics as a result, however.
@@ -40,8 +40,8 @@ Kim and Osterhout note that Attraction Violations, especially the phrase up and 
 If a reader interprets the violation as syntactically invalid, then they likely think that the critical verb is in the wrong tense, and changing it would return the sentence to a meaning that aligns with expectations ("\textit{The hearty meal was devoured}").
 If a reader interprets the violation as semantically invalid, then they likely think that the agent is wrong, and, in the case of the full sentence, that the agents should be flipped ("\textit{The kids were devouring}").
 This means that an Attraction Violation can cause a syntactically unambiguous sentence to be considered syntactically invalid due to its semantics.
-On the basis of this phenomenon, Kim and Osterhout researched if sentences with Attraction Violations can trigger a P600 effect in humans.
-Although P600 effects were typically taken to be responsible for purely syntactic errors at that time, syntactically unambiguous Attraction Violation sentences, which can be considered to be syntactically erroneous on the basis of the sentences meaning, may thus elicit a P600 response based on a sentence's unexpected semantics.
+On the basis of this idea, Kim and Osterhout researched if sentences with Attraction Violations can trigger a P600 effect in humans.
+Although P600 effects were typically taken to be responsible for purely syntactic errors at that time, syntactically unambiguous Attraction Violation sentences, which can be considered to be syntactically erroneous on the basis of the sentence's meaning, may thus elicit a P600 response based on a sentence's unexpected semantics.
 
 \begin{figure}
     \centering
@@ -81,8 +81,8 @@ This is why I also set some settings for CUDA regarding PyTorch's randomness whe
 \section{Results}
 The full results can be found in the appendices, where the graphs for every model are shown for all four comparisons:
 \begin{itemize}
-    \item Violation vs. Control Surprisal
-    \item Violation vs. Control Gradients
+    \item Violation Surprisal vs. Violation Gradients
+    \item Control Surprisal vs. Control Gradients
     \item Violation Surprisal vs. Control Surprisal
     \item Violation Gradients vs. Control Gradients
 \end{itemize}
@@ -181,7 +181,7 @@ Finally, figure \ref{fig:300000_surprisal_vs_gradients} shows an example of a mo
 Figure \ref{fig:correlation_surprisal_violation_control} shows the change in Pearson Correlation Coefficient between a model's surprisal on sentences with an Attraction Violations versus Control sentences as the model has been trained on more data.
 Figure \ref{fig:correlation_gradients_violation_control} shows the same information, but for the model's gradients.
 Tables \ref{tab:correlation_surprisal_violations_control} and \ref{tab:correlation_gradients_violations_control} show the exact correlation coefficient values from these plots.
-Additionally, figure \ref{fig:epoch1_correlations} shows the correlations between surprisals and gradients on the two difference conditions for the fully trained model.
+Additionally, figure \ref{fig:epoch1_correlations} shows the correlations between surprisals and gradients on the two different sentence conditions for the fully trained model.
 
 \begin{table}
     \centering
@@ -231,12 +231,12 @@ As the model continues to learn, the surprisal starts to become a worse predicto
 I expect this is due to overfitting: the model doesn't learn from being surprised by words anymore, so the backpropagated losses represent other information that it is learning.
 Since these losses represent more than just surprisal, they become less correlated with surprisal.
 Based on this explanation, we will assume that the model's gradients are best explained by its surprisals and vice versa for the model trained on 300,00 sentences.
-Figure \ref{fig:300000_surprisal_vs_gradients} shows the exact way in which the relationship between surprisals and gradients develops: higher surprisals are more common than lower surprisals, and as the size of the surprisal increases, the size of the gradients tends to decrease.
+Figure \ref{fig:300000_surprisal_vs_gradients} shows the exact way in which the relationship between surprisals and gradients develops for the model trained on 300,00 sentences: higher surprisals are more common than lower surprisals, and as the size of the surprisal increases, the size of the gradients tends to decrease.
 
 \subsection{Correlations between Conditions}
 Figures \ref{fig:correlation_surprisal_violation_control} and \ref{fig:correlation_gradients_violation_control} show the change between sentence conditions (Violation vs. Control) for a model's surprisal/gradients as the model is trained on more sentence data.
 These correlations stand for how similar the surprisals and gradients are between conditions: the higher the correlation, the more similar they are.
-A lower correlation between conditions then implies a greater difference in surprisal/gradients between conditions.
+A lower correlation between conditions then implies a greater difference in surprisal/gradients between the critical verbs of Violation sentences vs. Control sentences.
 This disparity between conditions says something about the effect strength of the anomalies in the Violation sentences: lower correlations imply that the syntactic/semantic anomalies have a bigger effect on the model's surprisal/gradients.
 
 The trend in figure \ref{fig:correlation_surprisal_violation_control} is clear: as the model has trained on more sentence data, the correlation decreases, and does so at an accelerating rate.
@@ -251,27 +251,17 @@ The right plot of figure \ref{fig:epoch1_correlations} shows the details: the di
 It can be seen that the critical verbs tend to elicit a greater backpropagation gradient in Violation sentences than Control sentences, although this is not always the case.
 
 \subsection{Correlations with ERP Components}
-% What does the correlation between surprisals/backpropagations say about the results by Kim et al.?
-% Since lower correlations imply a stronger effect of the anomalies on the model,
-%   lower correlations between surprisals imply a more intense N400 effect, and
-%   lower correlations between gradients imply a more intense P600 effect.
-% Is this reflected in the paper?
-
-% Preliminary results: correlations drop faster for surprisals than gradients.
-% The former drops quite significantly, and the latter doesn't.
-% These findings go against those of the paper, where the authors showed a large P600 effect and a smaller N400 effect.
-% Our findings, however, seem to imply that the anomalies' effect on the N400 is larger than on the P600.
-% In our figures, it can be seen that surprisals for violations are higher than for control sentences, and this difference grows as the model has trained on more sentences.
-% This phenomenon may be explained by the model's understanding of language: as the model is trained on more sentences, it learns to be more certain of its predictions, and gains a better understanding of language.
-% Models trained on more sentences are then more surprised when they encounter an unexpected word.
-
-
+We have seen that, in our results, the anomalous critical verbs in Attraction Violation sentences have a bigger effect on the model's surprisal than on the model's gradients.
+If we follow the work by Frank (\cite{frank2024gradients}) and assume that model surprisal correlates with the N400, and that model gradients correlate with the P600, then the greater disparity between sentence conditions for model surprisal than model gradients would have us expect that in Attraction Violation sentences, the N400 would be more active than the P600.
+However, this goes against the findings by Kim and Osterhout (\cite{kim2005combinatory}), who show that the P600 is much more active when reading Violation sentences than the N400.
+I expect that this contrast may have something to do with how the model perceives the critical verb: as either a syntactic anomaly, or a semantic anomaly.
+Since the N400 is thought to represent semantic language-error, and since it correlates with model surprisal, it could be possible that the model's surprisal is more effected by the critical verbs than its gradients because it considers the Violation sentence to be semantically anomalous, and not syntactically anomalous.
+It may be that the model, at the critical verb, recognizes that the semantics of the sentence do not make sense given the current syntax, which acknowledges the problem that this syntactically unambiguous sentence may need a syntactic change in order to become semantically expected, which is also a problem acknowledged in the work by Kim and Osterhout.
 
 \section{Conclusions}
-% From my findings, I would conclude that the P600 component is marginally simulated by model surprisal, but only for models trained on 100,000 sentences or less.
-% Bigger models seem to become worse predictors of the P600, which is likely due to the scale of the data they were trained on, causing the models' surprisal values to reflect those of humans worse.
-% Regardless, the strongest correlation between Model Surprisal and the P600 component is still only 0.159, which is quite weak.
-% The Model Gradients seem to be even weaker predictors of P600 values, and, on the basis of my findings, I would conclude that they do not explain the P600 component.
+From my findings, I would not conclude that the P600 component can be explained by model surprisal or gradients, since they seem to go against earlier findings by Kim and Osterhout (\cite{kim2005combinatory}) and Frank (\cite{frank2024gradients}).
+However, it is clear that model surprisal and its gradients are effected by anomalous critical verbs, so there certainly is a component of language-error processing being performed by the model on the anomalous critical verbs, akin to the theorized backpropagation of language error by the P600.
+So, although I would not conclude that the P600 can be explained by either the model's surprisals or gradients, I would conclude that the unexpectedness of a word influences the size of the backpropagated gradients.
 
 \bibliography{bib}
 
