@@ -79,28 +79,6 @@ I do this in order to improve the reproducibility of my results.
 This is why I also set some settings for CUDA regarding PyTorch's randomness when computing on GPU.
 
 \section{Results}
-% \begin{figure*}
-%     \centering
-%     \includegraphics[width=.9\textwidth]{correlation_change/surprisal_gradients.png}
-%     \caption{The change of the Pearson Correlation Coefficient between Model Surprisal and Model Gradients as the model is trained on increasingly more data.}
-%     \label{fig:coefficient_surprisal_gradients}
-% \end{figure*}
-% \begin{figure*}
-%     \centering
-%     \includegraphics[width=.9\textwidth]{correlation_change/gradients_p600.png}
-%     \caption{The change of the Pearson Correlation Coefficient between Model Gradients and P600 as the model is trained on increasingly more data.}
-%     \label{fig:coefficient_gradients_p600}
-% \end{figure*}
-% \begin{figure*}
-%     \centering
-%     \includegraphics[width=.9\textwidth]{correlation_change/surprisal_p600.png}
-%     \caption{The change of the Pearson Correlation Coefficient between Model Surprisal and Mean P600 as the model is trained on increasingly more data.}
-%     \label{fig:coefficient_surprisal_p600}
-% \end{figure*}
-
-% Figures \ref{fig:coefficient_surprisal_gradients}, \ref{fig:coefficient_gradients_p600}, and \ref{fig:coefficient_surprisal_p600} show the change of the correlation between variables as the amount of data the neural language model has trained on increases.
-% The exact values of the points in this plot can be found in tables \ref{tab:correlation_surprisal_gradients}, \ref{tab:correlation_gradients_p600}, and \ref{tab:correlation_surprisal_p600} respectively.
-% The individual scatterplots are placed in the appendices.
 The full results can be found in the appendices, where the graphs for every model are shown for all four comparisons:
 \begin{itemize}
     \item Violation vs. Control Surprisal
@@ -186,7 +164,7 @@ Finally, figure \ref{fig:300000_surprisal_vs_gradients} shows an example of a mo
     \label{fig:correlation_gradients_violation_control}
 \end{figure*}
 
-\begin{figure*}[h]
+\begin{figure*}
     \centering
     \begin{subfigure}{0.4\textwidth}
         \centering
@@ -244,17 +222,33 @@ Additionally, figure \ref{fig:epoch1_correlations} shows the correlations betwee
 
 \section{Discussion}
 \subsection{Correlations between Surprisal and Gradients}
-% Talk about correlation strength between surprisal (representation of N400) and gradients (representation of P600) and how it changes (see commented text below).
-% This trend is shown for both violation and control sentences.
-% Suprisal and Gradients are most correlated at model size 300000, so we take that size as standard from now on.
-% Talk about the sentence count 300000 size specifically here.
-
+The data in figures \ref{fig:correlation_violations_surprisal_gradients} and \ref{fig:correlation_control_surprisal_gradients} show an interesting trend in the predictive power of a model's surprisal for its gradients: the strength of the correlation between the variables gets stronger as the model has trained on more data.
+This strength reaches a peak of -0.6 to -0.65 when the model is trained on 300,000 sentences, after which, the correlation strength starts to move into the opposite direction; it returns to zero and grows from negative to positive.
+I expect that the increasing strength of the correlation until 300,000 sentences can be explained by the learning process of the model.
+As the model has learned more, its gradients become a better representation of its surprisal, because it has gained an understanding of the data it has learned.
+When it has reached this depth of understanding, words that it expects backpropagate with small losses, while words that it is surprised by backpropagate with large losses.
+As the model continues to learn, the surprisal starts to become a worse predictor of the gradients.
+I expect this is due to overfitting: the model doesn't learn from being surprised by words anymore, so the backpropagated losses represent other information that it is learning.
+Since these losses represent more than just surprisal, they become less correlated with surprisal.
+Based on this explanation, we will assume that the model's gradients are best explained by its surprisals and vice versa for the model trained on 300,00 sentences.
+Figure \ref{fig:300000_surprisal_vs_gradients} shows the exact way in which the relationship between surprisals and gradients develops: higher surprisals are more common than lower surprisals, and as the size of the surprisal increases, the size of the gradients tends to decrease.
 
 \subsection{Correlations between Conditions}
-% Talk about the correlations between surprisals and gradients between conditions.
-% As the strength of the correlation decreases, the model's surprisals/backpropagations deviate more when violation sentences are given as opposed to control sentences.
-% This implies that syntactic and semantic anomalies have a bigger effect on the models' surprisal/backpropagation as the correlation decreases.
+Figures \ref{fig:correlation_surprisal_violation_control} and \ref{fig:correlation_gradients_violation_control} show the change between sentence conditions (Violation vs. Control) for a model's surprisal/gradients as the model is trained on more sentence data.
+These correlations stand for how similar the surprisals and gradients are between conditions: the higher the correlation, the more similar they are.
+A lower correlation between conditions then implies a greater difference in surprisal/gradients between conditions.
+This disparity between conditions says something about the effect strength of the anomalies in the Violation sentences: lower correlations imply that the syntactic/semantic anomalies have a bigger effect on the model's surprisal/gradients.
 
+The trend in figure \ref{fig:correlation_surprisal_violation_control} is clear: as the model has trained on more sentence data, the correlation decreases, and does so at an accelerating rate.
+This would imply that, as the model is trained on more data, it should be more surprised about the critical verbs in Violation sentences.
+The left plot of figure \ref{fig:epoch1_correlations} shows this in practice: the diagonal line in the plot is the collection of words preceding the critical verb, while the points off this line are the critical verbs.
+It can be seen that these critical verbs have higher surprisals in the Violation sentences than in the Control sentences.
+Thus, as a model has learned on more data, it becomes more surprised at unexpected words.
+
+The trend of decreasing correlations across conditions does not seem to hold to the same degree for gradients, however.
+Figure \ref{fig:correlation_gradients_violation_control} shows that there exists only a slight decrease in correlation as the model is trained on more sentence data.
+The right plot of figure \ref{fig:epoch1_correlations} shows the details: the diagonal line stands for words preceding the critical verb, while the points off this line are the critical verbs.
+It can be seen that the critical verbs tend to elicit a greater backpropagation gradient in Violation sentences than Control sentences, although this is not always the case.
 
 \subsection{Correlations with ERP Components}
 % What does the correlation between surprisals/backpropagations say about the results by Kim et al.?
@@ -272,26 +266,6 @@ Additionally, figure \ref{fig:epoch1_correlations} shows the correlations betwee
 % Models trained on more sentences are then more surprised when they encounter an unexpected word.
 
 
-% The data in figure \ref{fig:coefficient_surprisal_gradients} show an interesting trend in the predictive power of a model's surprisal for its gradients: the strength of the correlation between the variables gets stronger as the model has trained on more data.
-% This strength reaches a peak when the model is trained on 300,000 sentences, after which, the correlation strength starts to move into the opposite direction; it returns to zero and grows from negative to positive.
-% I expect that the increasing strength of the correlation until 300,000 sentences can be explained by the learning process of the model.
-% As the model has learned more, its gradients become a better representation of its surprisal, because it has gained an understanding of the data it has learned.
-% When it has reached this depth of understanding, words that it expects backpropagate with small losses, while words that it is surprised by backpropagate with large losses.
-% As the model continues to learn, the surprisal starts to become a worse predictor of the gradients.
-% I expect this is due to overfitting: the model doesn't learn from being surprised by words anymore, so the backpropagated losses represent other information that it is learning.
-% Since these losses represent more than just surprisal, they become less correlated with surprisal.
-
-% When familiar with the trend shown in figure \ref{fig:coefficient_surprisal_gradients}, the results of figure \ref{tab:correlation_gradients_p600} become interesting: both figures show the same trend of the correlation changing over time.
-% That is, the correlation between the model's gradients and the model's surprisal, and the correlation between the model's gradients and the mean P600, follow the trend that the correlation decreases until 300,000 sentences, after which the correlation starts to grow into the positives.
-% However, while the correlation strength between Model Surprisal and Gradients is at its strongest at 300,000 sentences, this does not hold for the correlation between Model Surprisal and Mean P600, which actually reaches a peak after a full epoch of training.
-% If we assume my explanation about the change in correlation between Model Surprisal and Gradients being caused by the model learning more than just surprisal to be true, then the fact that the correlation between Model Gradients and Mean P600 reaches a peak after a fully trained model may mean that the model's gradients are best at predicting Mean P600 values when the model has learned to use more than just surprisal when backpropagating errors.
-% This, in turn, would imply that just surprisal would not be a strong predictor of the P600 component.
-% I would even state that this means that the P600 component may be more than just the backpropagation of surprisal in humans, although I do make this claim as someone not well-versed in psycholinguistics.
-
-% Figure \ref{fig:coefficient_surprisal_p600} seems to show a clear picture: as the amount of data the model has been trained on increases, the correlation between Model Surprisal and Mean P600 decreases, and surprisal increasingly becomes a worse predictor of the P600 component.
-% I think that this development is caused by the scale of the data that the model has been trained on: once the model has been trained on millions of sentences, or even tens of millions, the correlation decreases because the model's surprisal grows to reflect a human's backpropagation worse.
-% The model has learned on so much data that it is not surprised anymore by things that a regular human would have to backpropagate on.
-% This phenomenon has also been shown to exist in other large language models, such as modern transformers (\cite{oh2023why}).
 
 \section{Conclusions}
 % From my findings, I would conclude that the P600 component is marginally simulated by model surprisal, but only for models trained on 100,000 sentences or less.
