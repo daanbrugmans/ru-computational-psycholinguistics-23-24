@@ -28,39 +28,51 @@ This report contains the findings found by me for the Assignment 2 project.
 The relevant code for this assignment can be found at the following URL: \url{https://github.com/daanbrugmans/ru-computational-psycholinguistics-23-24/tree/main/assignment-2/code}.
 
 \section{Related Work}
-% For the Assignment 2 project, students must choose a controlled experiment where participants read English or Dutch sentences while their P600 component is measured.
-% I have chosen to use the data from the controlled experiment performed in \cite{frank2015erp}.
-% This data is also used by the authors of \cite{frank2024gradients}, and is briefly introduced in the description of the Assignment 2 project.
-% This means that my report is (an attempt at) an extension of the work in \cite{frank2024gradients}.
+For my realization of Assignment 2, I have chosen a controlled experiment from \cite{kim2005combinatory}, specifically their first experiment.
+Kim and Osterhout researched P600 activity in anomalous sentences.
+When they released their research, it was generally accepted that the P600 component was solely responsible for language error related to syntax, while the N400 was responsible for language error related to semantics.
+In their work, Kim and Osterhout show that the P600 is still activated in sentences that are syntactically unambiguous, but have illogical semantics as a result, however.
+The general structure of such sentences was one where the two agents of a sentence are swapped, maintaining a certain "theme" and a valid syntax, while going against semantics that are considered regular.
+An example of this is the sentence "\textit{The hearty meal was devouring the kids}", where the syntax is unambiguous, but does imply a meaning that goes against what is usually expected of the combination of the sentence's agents and theme, which would be "\textit{The kids were devouring the hearty meal}".
+The authors name such sentences \textbf{(Attraction) Violations}.
 
-% The data from the controlled experiment in \cite{frank2015erp} consists of EEG data of 24 native British English speakers, who all read a set of 205 sentences taken from English-language novels.
-% The authors recorded EEG data of six different ERP components, including the P600 component, and calculated the average EEG values for every ERP component, for every word of every sentence for every participant of the experiment.
-% This dataset should fulfill the requirements set by the assignment: the experiment language is English, the participants' stimuli are independent sentences, the size of the P600 component is one dependent variable and showed an effect, and the independent variables are manipulated by varying the content of the sentence stimuli.
+Kim and Osterhout note that Attraction Violations, especially the phrase up and including the critical verb ("\textit{The hearty meal was devouring}"), while syntactically unambiguous, can be interpreted to be either syntactically or semantically incorrect.
+If a reader interprets the violation as syntactically invalid, then they likely think that the critical verb is in the wrong tense, and changing it would return the sentence to a meaning that aligns with expectations ("\textit{The hearty meal was devoured}").
+If a reader interprets the violation as semantically invalid, then they likely think that the agent is wrong, and, in the case of the full sentence, that the agents should be flipped ("\textit{The kids were devouring}").
+This means that an Attraction Violation can cause a syntactically unambiguous sentence to be considered syntactically invalid due to its semantics.
+On the basis of this phenomenon, Kim and Osterhout researched if sentences with Attraction Violations can trigger a P600 effect in humans.
+Although P600 effects were typically taken to be responsible for purely syntactic errors at that time, syntactically unambiguous Attraction Violation sentences, which can be considered to be syntactically erroneous on the basis of the sentences meaning, may thus elicit a P600 response based on a sentence's unexpected semantics.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.45\textwidth]{kim_osterhout.png}
+    \caption{ERP Brain Activity when reading Violation vs. Control sentences, from \cite{kim2005combinatory}.}
+    \label{fig:kim_osterhout}
+\end{figure}
+
+Kim and Osterhout conduct an experiment where participants' N400 and P600 components are read while reading both Attraction Violation sentences ("\textit{The hearty meal was devouring}"), and Control Sentences where the critical verb of the sentence is altered as to let the sentence be both syntactically and semantically coherent with its agents and theme ("\textit{The hearty meal was devoured}").
+Their results show that, on the critical verb, the P600 component is much more pronounced on Attraction Violation sentences than on the Control sentences.
+They also showed that the N400 component is only slightly present when Attraction Violation sentences are read, meaning that the error stemming from the sentence is mostly processed by the P600.
+These findings then imply that the P600 is not responsible for syntactic error alone, and that a degree of semantic error is also processed in the P600.
+A visualization of these findings can be seen in figure \ref{fig:kim_osterhout}.
 
 \section{Methodology}
 All the code I have written can be found in the Jupyter Notebook called \texttt{main.ipynb}, which should thusly contain all results also shown in this report.
 It can be found at the following URL: \url{https://github.com/daanbrugmans/ru-computational-psycholinguistics-23-24/blob/main/assignment-2/code/main.ipynb}
 I have placed the code in the \texttt{get\_predictions.py} file in a function called \texttt{get\_predictions}, so that I can easily call this code from the notebook.
 
-% TODO: REWRITE TO FIT NEW DATA
-% The dataset of the study in \cite{frank2015erp} is openly accessible through a collection of \texttt{.mat} files, which are typically used in a MatLab setting, but I use Scipy to open this data.
-% Within the collection of code I hand in alongside this report, the raw data file I used for my experiment can be found in the \texttt{data} folder as \texttt{code/data/stimuli\_erp.mat}.
-% The original README provided by the authors is also included.
-% From this dataset, I collect the list of sentences read by the participants of the study, and the related ERP data.
-% Although this data does not need any preprocessing, I do wrangle the ERP data into the format used by the code in \texttt{get\_predictions.py}, so that I can easily merge the data from the study with the data generated by the models.
-% I also write the sentence data from the study to a plain text file in the \texttt{items} folder called \texttt{stimuli.txt}, as is required for generating model results.
-
-% The data from \cite{frank2015erp} includes the P600 component for all 24 participants per word.
-% I have chosen to take the mean of all 24 P600s and only analyse these means.
-% I made this decision because I wanted to have a single P600 for every word to represent the entire participant population.
-% I have chosen the mean as opposed to the median because of its sensitivity to outliers: I wanted to include information about participants with outlying P600 values for specific words into the aggregated P600 value, and I think that the mean does a better job at this than the median due to its sensitivity to outliers.
+Kim and Osterhout (\cite{kim2005combinatory}) provide their full set of Attraction Violation sentences and (Passive) Control sentences in their paper.
+I have copied the full sets of these sentences up until and including the critical verb.
+I have stored them as text files called \texttt{violations.txt} for the Attraction Violation sentences and \texttt{control.txt} for the Control sentences in a folder called \texttt{data}.
+The notebook processes these sentences further so that they can be used by the RNNs by lowercasing all words and separating genitive markers ('s) from consonants.
+Furthermore, after the surprisals and gradients have been calculated, I remove sentences that do not have surprisal and/or gradient information, and remove sentence-initial words from sentences that do.
 
 My results are a collection of scatterplots that visualize the relationship between the surprisal and gradients of the models.
 Every plot also contains a quadratic function fitted to the data to show the trend of the relationship between the variables.
 I have chosen for a quadratic function as opposed to a linear function, as I found that this fits the data better.
 Included in every plot is also the Pearson Correlation Coefficient \textit{r} between variables.
 Since surprisal values and gradients are calculated for multiple models, I provide a plot for every model.
-For every pair of variables, I also provide a plot of how the Pearson Correlation Coefficient changes as the model is trained on more data, which will be the main focus of my results.
+For every pair of variables, I also provide a plot of how the Pearson Correlation Coefficient changes as the model is trained on more data.
 
 Before producing results, I set a universal seed for Python itself, NumPy, and PyTorch of \texttt{3131}.
 I do this in order to improve the reproducibility of my results.
@@ -89,14 +101,146 @@ This is why I also set some settings for CUDA regarding PyTorch's randomness whe
 % Figures \ref{fig:coefficient_surprisal_gradients}, \ref{fig:coefficient_gradients_p600}, and \ref{fig:coefficient_surprisal_p600} show the change of the correlation between variables as the amount of data the neural language model has trained on increases.
 % The exact values of the points in this plot can be found in tables \ref{tab:correlation_surprisal_gradients}, \ref{tab:correlation_gradients_p600}, and \ref{tab:correlation_surprisal_p600} respectively.
 % The individual scatterplots are placed in the appendices.
+The full results can be found in the appendices, where the graphs for every model are shown for all four comparisons:
+\begin{itemize}
+    \item Violation vs. Control Surprisal
+    \item Violation vs. Control Gradients
+    \item Violation Surprisal vs. Control Surprisal
+    \item Violation Gradients vs. Control Gradients
+\end{itemize}
 
 \subsection{Comparing Surprisal vs Gradients}
-% Surprisal vs Gradients plots for violation sentences
-% Surprisal vs Gradients plots for control sentences
+\begin{figure}
+    \centering
+    \includegraphics[width=.45\textwidth]{violations_surprisal_vs_gradients/300000.png}
+    \caption{Surprisal vs. Gradients on Violations for an RNN trained on 300,000 sentences.}
+    \label{fig:300000_surprisal_vs_gradients}
+\end{figure}
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=.9\textwidth]{correlation_change/violations_surprisal_vs_gradients.png}
+    \caption{The change in Correlation between Model Surprisal and Gradients on Violation Sentences as the model is trained on increasingly more data.}
+    \label{fig:correlation_violations_surprisal_gradients}
+\end{figure*}
+\begin{figure*}
+    \centering
+    \includegraphics[width=.9\textwidth]{correlation_change/control_surprisal_vs_gradients.png}
+    \caption{The change in Correlation between Model Surprisal and Gradients on Control Sentences as the model is trained on increasingly more data.}
+    \label{fig:correlation_control_surprisal_gradients}
+\end{figure*}
+
+Figure \ref{fig:correlation_violations_surprisal_gradients} shows the change in Pearson Correlation Coefficient between a model's surprisal and gradients on sentences with an Attraction Violation as the model has been trained on more data.
+Figure \ref{fig:correlation_control_surprisal_gradients} shows the same information, but for Control sentences.
+Tables \ref{tab:correlation_violations_surprisal_gradients} and \ref{tab:correlation_control_surprisal_gradients} show the exact correlation coefficient values from these plots.
+Finally, figure \ref{fig:300000_surprisal_vs_gradients} shows an example of a model's surprisals against its gradients, specifically the Recurrent Neural Network trained after 300,000 sentences.
+
+\begin{table}
+    \centering
+    \begin{tabular}{c|c}
+        \textbf{Trained Sentences Count} & \textbf{\textit{r}} \\
+        \hline
+        10,000&0.065\\
+        30,000&-0.094\\
+        100,000&-0.600\\
+        300,000&-0.601\\
+        1,000,000&-0.577\\
+        3,000,000&-0.431\\
+        10,000,000&-0.252\\
+        30,000,000&0.149\\
+        epoch1&0.282
+    \end{tabular}
+    \caption{Correlation Coefficients between Model Surprisal and Gradients on Violation Sentences by the model's train data size.}
+    \label{tab:correlation_violations_surprisal_gradients}
+\end{table}
+\begin{table}
+    \centering
+    \begin{tabular}{c|c}
+        \textbf{Trained Sentences Count} & \textbf{\textit{r}} \\
+        \hline
+        10,000&0.009\\
+        30,000&-0.205\\
+        100,000&-0.650\\
+        300,000&-0.650\\
+        1,000,000&-0.591\\
+        3,000,000&-0.431\\
+        10,000,000&-0.380\\
+        30,000,000&-0.139\\
+        epoch1&-0.048
+    \end{tabular}
+    \caption{Correlation Coefficients between Model Surprisal and Gradients on Control Sentences by the model's train data size.}
+    \label{tab:correlation_control_surprisal_gradients}
+\end{table}
 
 \subsection{Comparing Conditions}
-% Surprisal of Violation Sentences vs Surprisal of Control Sentences
-% Surprisal of Gradients Sentences vs Gradients of Control Sentences
+\begin{figure*}
+    \centering
+    \includegraphics[width=.9\textwidth]{correlation_change/surprisal_violations_vs_control.png}
+    \caption{The change in Correlation of Model Surprisal between Violation Sentences and Control Sentences as the model is trained on increasingly more data.}
+    \label{fig:correlation_surprisal_violation_control}
+\end{figure*}
+\begin{figure*}
+    \centering
+    \includegraphics[width=.9\textwidth]{correlation_change/gradients_violations_vs_control.png}
+    \caption{The change in Correlation of Model Gradients between Violation Sentences and Control Sentences as the model is trained on increasingly more data.}
+    \label{fig:correlation_gradients_violation_control}
+\end{figure*}
+
+\begin{figure*}[h]
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{surprisal_violations_vs_control/epoch1.png}
+    \end{subfigure}
+    \begin{subfigure}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{gradients_violations_vs_control/epoch1.png}
+    \end{subfigure}
+    \caption{Plots of the correlation between the fully trained (epoch1) model's surprisals (left) and gradients (right) on Violation Sentences vs. Control Sentences.}
+    \label{fig:epoch1_correlations}
+\end{figure*}
+
+Figure \ref{fig:correlation_surprisal_violation_control} shows the change in Pearson Correlation Coefficient between a model's surprisal on sentences with an Attraction Violations versus Control sentences as the model has been trained on more data.
+Figure \ref{fig:correlation_gradients_violation_control} shows the same information, but for the model's gradients.
+Tables \ref{tab:correlation_surprisal_violations_control} and \ref{tab:correlation_gradients_violations_control} show the exact correlation coefficient values from these plots.
+Additionally, figure \ref{fig:epoch1_correlations} shows the correlations between surprisals and gradients on the two difference conditions for the fully trained model.
+
+\begin{table}
+    \centering
+    \begin{tabular}{c|c}
+        \textbf{Trained Sentences Count} & \textbf{\textit{r}} \\
+        \hline
+        10,000&0.998\\
+        30,000&0.990\\
+        100,000&0.980\\
+        300,000&0.984\\
+        1,000,000&0.967\\
+        3,000,000&0.934\\
+        10,000,000&0.881\\
+        30,000,000&0.810\\
+        epoch1&0.770
+    \end{tabular}
+    \caption{Correlation Coefficients between Model Surprisals of Violation Sentences and Control Sentences by the model's train data size.}
+    \label{tab:correlation_surprisal_violations_control}
+\end{table}
+\begin{table}
+    \centering
+    \begin{tabular}{c|c}
+        \textbf{Trained Sentences Count} & \textbf{\textit{r}} \\
+        \hline
+        10,000&0.981\\
+        30,000&0.986\\
+        100,000&0.998\\
+        300,000&0.987\\
+        1,000,000&0.991\\
+        3,000,000&0.980\\
+        10,000,000&0.967\\
+        30,000,000&0.935\\
+        epoch1&0.947
+    \end{tabular}
+    \caption{Correlation Coefficients between Model Gradients of Violation Sentences and Control Sentences by the model's train data size.}
+    \label{tab:correlation_gradients_violations_control}
+\end{table}
 
 \section{Discussion}
 \subsection{Correlations between Surprisal and Gradients}
@@ -148,62 +292,6 @@ This is why I also set some settings for CUDA regarding PyTorch's randomness whe
 % I think that this development is caused by the scale of the data that the model has been trained on: once the model has been trained on millions of sentences, or even tens of millions, the correlation decreases because the model's surprisal grows to reflect a human's backpropagation worse.
 % The model has learned on so much data that it is not surprised anymore by things that a regular human would have to backpropagate on.
 % This phenomenon has also been shown to exist in other large language models, such as modern transformers (\cite{oh2023why}).
-
-% TODO: REWRITE TO FIT NEW DATA
-% \begin{table}
-%     \centering
-%     \begin{tabular}{c|c}
-%         \textbf{Trained Data Count} & \textbf{\textit{r}} \\
-%         \hline
-%         10000&-0.169\\
-%         30000&-0.397\\
-%         100000&-0.415\\
-%         300000&-0.491\\
-%         1000000&-0.288\\
-%         3000000&-0.243\\
-%         10000000&-0.040\\
-%         30000000&0.113\\
-%         epoch1&0.212
-%     \end{tabular}
-%     \caption{Correlation Coefficients between Model Surprisal and Model Gradients by the model's train data size.}
-%     \label{tab:correlation_surprisal_gradients}
-% \end{table}
-% \begin{table}
-%     \centering
-%     \begin{tabular}{c|c}
-%         \textbf{Trained Data Count} & \textbf{\textit{r}} \\
-%         \hline
-%         10000&0.103\\
-%         30000&-0.026\\
-%         100000&-0.035\\
-%         300000&-0.037\\
-%         1000000&0.007\\
-%         3000000&0.021\\
-%         10000000&0.053\\
-%         30000000&0.084\\
-%         epoch1&0.116
-%     \end{tabular}
-%     \caption{Correlation Coefficients between Model Gradients and Mean P600 by the model's train data size.}
-%     \label{tab:correlation_gradients_p600}
-% \end{table}
-% \begin{table}
-%     \centering
-%     \begin{tabular}{c|c}
-%         \textbf{Trained Data Count} & \textbf{\textit{r}} \\
-%         \hline
-%         10000&0.154\\
-%         30000&0.156\\
-%         100000&0.159\\
-%         300000&0.154\\
-%         1000000&0.149\\
-%         3000000&0.125\\
-%         10000000&0.083\\
-%         30000000&0.065\\
-%         epoch1&0.058
-%     \end{tabular}
-%     \caption{Correlation Coefficients between Model Surprisal and Mean P600 by the model's train data size.}
-%     \label{tab:correlation_surprisal_p600}
-% \end{table}
 
 \section{Conclusions}
 % From my findings, I would conclude that the P600 component is marginally simulated by model surprisal, but only for models trained on 100,000 sentences or less.
